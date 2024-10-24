@@ -94,6 +94,7 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
                   onPressed: viewModel.isFormValid
                       ? () async {
                           await viewModel.exportToExcel();
+                          viewModel.clearForm();
                         }
                       : null,
                   child: viewModel.isBusy

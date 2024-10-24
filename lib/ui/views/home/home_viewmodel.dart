@@ -56,7 +56,7 @@ class HomeViewModel extends FutureViewModel
 
       sheet.appendRow(row);
     }
-    excel.save(fileName: 'CUSTOMERS.xlsx');
+    excel.save(fileName: 'CUSTOMERS V3.xlsx');
     setBusy(false);
     _bottomSheetService.showBottomSheet(title: 'Excel file downloaded!');
   }
