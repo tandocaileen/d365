@@ -9,15 +9,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # Ensures the workflow has permission to push to the gh-pages branch
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        # Fetch only the latest commit
-        fetch-depth: 1
+        fetch-depth: 1  # Fetch only the latest commit
+
+    - name: Setup Node.js (optional if your project uses Node.js)
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Set to your Node.js version
+
+    - name: Build project (optional if you need to build your site)
+      run: |
+        echo "You can add build commands here if necessary."
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        # The folder you want to deploy
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./web_page
