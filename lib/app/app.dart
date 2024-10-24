@@ -16,6 +16,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: RouterService),
+    LazySingleton(classType: SnackbarService)
 // @stacked-service
   ],
   bottomsheets: [

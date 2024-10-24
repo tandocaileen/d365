@@ -1,3 +1,4 @@
+import 'package:d365_integration/ui/common/app_colors.dart';
 import 'package:d365_integration/ui/common/ui_helpers.dart';
 import 'package:d365_integration/ui/views/home/home_view.form.dart';
 import 'package:d365_integration/ui/views/home/home_viewmodel.dart';
@@ -98,7 +99,9 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView {
                         }
                       : null,
                   child: viewModel.isBusy
-                      ? const CircularProgressIndicator()
+                      ? const CircularProgressIndicator(
+                          color: bgWhite,
+                        )
                       : const Text('Export To Excel'),
                 ),
               ],
