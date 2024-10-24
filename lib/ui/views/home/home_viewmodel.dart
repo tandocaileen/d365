@@ -13,6 +13,7 @@ class HomeViewModel extends FutureViewModel
     implements FormViewModel {
   final D365Service _d365service = locator<D365Service>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final SnackbarService _snackbarService = locator<SnackbarService>();
   bool crossCompany = false;
 
   CustomersResponse customersData = CustomersResponse();
@@ -23,42 +24,68 @@ class HomeViewModel extends FutureViewModel
   }
 
   Future<void> submitForm() async {
-    customersData = await _d365service.fetchCustomersV3(
+    try {
+      customersData = await _d365service.fetchCustomersV3(
         apiKey: apiKeyValue ?? '',
         dataAreaId: dataAreaIdValue ?? '',
         crossCompany: crossCompany,
         top: int.parse(topValue ?? '0'),
-        skip: int.parse(skipValue ?? '0'));
+        skip: int.parse(skipValue ?? '0'),
+      );
 
-    // Call to refresh UI if necessary
-    notifyListeners();
+      // Call to refresh UI if necessary
+      notifyListeners();
+    } catch (e) {
+      // Handle the error
+      _snackbarService.showSnackbar(
+          message: 'Oops! something went wrong; try again');
+      // Optionally, you can add more error handling or UI feedback here
+    }
   }
 
   Future<void> exportToExcel() async {
     setBusy(true);
-    await submitForm();
-    final excel = Excel.createExcel();
-    final sheet = excel['Sheet1'];
+    try {
+      customersData = await _d365service.fetchCustomersV3(
+        apiKey: apiKeyValue ?? '',
+        dataAreaId: dataAreaIdValue ?? '',
+        crossCompany: crossCompany,
+        top: int.parse(topValue ?? '0'),
+        skip: int.parse(skipValue ?? '0'),
+      );
 
-    // Adding headers to the Excel sheet
-    sheet.appendRow(columnTitles.map((title) => TextCellValue(title)).toList());
+      // Call to refresh UI if necessary
+      notifyListeners();
+      final excel = Excel.createExcel();
+      final sheet = excel['Sheet1'];
 
-    // Adding customer data
-    for (Value customer in customersData.value ?? []) {
-      List<TextCellValue> row = [];
+      // Adding headers to the Excel sheet
+      sheet.appendRow(
+          columnTitles.map((title) => TextCellValue(title)).toList());
 
-      // Add values to the row based on the defined column titles
-      for (var title in columnTitles) {
-        var fieldValue = customer.getField(title);
-        //log('$title: $fieldValue');
-        row.add(TextCellValue(fieldValue.toString()));
+      // Adding customer data
+      for (Value customer in customersData.value ?? []) {
+        List<TextCellValue> row = [];
+
+        // Add values to the row based on the defined column titles
+        for (var title in columnTitles) {
+          var fieldValue = customer.getField(title);
+          //log('$title: $fieldValue');
+          row.add(TextCellValue(fieldValue.toString()));
+        }
+
+        sheet.appendRow(row);
       }
-
-      sheet.appendRow(row);
+      excel.save(fileName: 'CUSTOMERS V3.xlsx');
+      setBusy(false);
+      _bottomSheetService.showBottomSheet(title: 'Excel file downloaded!');
+    } catch (e) {
+      // Handle the error
+      setBusy(false);
+      _snackbarService.showSnackbar(
+          message: 'Oops! something went wrong; try again');
+      // Optionally, you can add more error handling or UI feedback here
     }
-    excel.save(fileName: 'CUSTOMERS V3.xlsx');
-    setBusy(false);
-    _bottomSheetService.showBottomSheet(title: 'Excel file downloaded!');
   }
 
   @override
