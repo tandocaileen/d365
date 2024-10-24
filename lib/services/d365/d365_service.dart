@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:d365_integration/models/customers_response_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'd365_client.dart';
@@ -7,11 +9,11 @@ import 'd365_client.dart';
 class D365Service {
   final D365Client _d365Client = D365Client(Dio());
 
-  Future<dynamic> fetchCustomersV3({
+  Future<CustomersResponse> fetchCustomersV3({
     required String apiKey,
     String dataAreaId = 'USMF',
     bool crossCompany = true,
-    int top = 10,
+    int top = 1,
     int skip = 0,
     String select = '',
     String customerAccount = '',
@@ -26,7 +28,8 @@ class D365Service {
         select,
         customerAccount,
       );
-      return response;
+
+      return CustomersResponse.fromJson(json.decode(response));
     } on DioException catch (e) {
       log(e.toString());
       throw Exception('Failed to fetch CustomersV3 data');

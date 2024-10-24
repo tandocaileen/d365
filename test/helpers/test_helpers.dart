@@ -2,7 +2,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:d365_integration/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:d365_integration/services/warehouse_inventory_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -11,15 +10,12 @@ import 'test_helpers.mocks.dart';
   MockSpec<NavigationService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<WarehouseInventoryService>(
-      onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
   getAndRegisterNavigationService();
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
-  getAndRegisterWarehouseInventoryService();
 // @stacked-mock-register
 }
 
@@ -73,12 +69,6 @@ MockDialogService getAndRegisterDialogService() {
   return service;
 }
 
-MockWarehouseInventoryService getAndRegisterWarehouseInventoryService() {
-  _removeRegistrationIfExists<WarehouseInventoryService>();
-  final service = MockWarehouseInventoryService();
-  locator.registerSingleton<WarehouseInventoryService>(service);
-  return service;
-}
 // @stacked-mock-create
 
 void _removeRegistrationIfExists<T extends Object>() {

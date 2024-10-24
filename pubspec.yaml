@@ -8,9 +8,12 @@ environment:
 
 dependencies:
   dio: ^5.7.0
+  excel: ^4.0.6
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.9.3
   injectable: ^2.5.0
+  path_provider: ^2.1.4
   retrofit: ^4.4.1
   stacked: ^3.4.0
   stacked_services: ^1.1.0

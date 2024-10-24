@@ -22,15 +22,19 @@ class StackedRouterWeb extends _i4.RootStackRouter {
   @override
   final Map<String, _i4.PageFactory> pagesMap = {
     HomeViewRoute.name: (routeData) {
-      return _i4.MaterialPageX<dynamic>(
+      return _i4.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.HomeView(),
+        opaque: true,
+        barrierDismissible: false,
       );
     },
     StartupViewRoute.name: (routeData) {
-      return _i4.MaterialPageX<dynamic>(
+      return _i4.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.StartupView(),
+        opaque: true,
+        barrierDismissible: false,
       );
     },
   };
@@ -38,8 +42,14 @@ class StackedRouterWeb extends _i4.RootStackRouter {
   @override
   List<_i4.RouteConfig> get routes => [
         _i4.RouteConfig(
+          '/#redirect',
+          path: '/',
+          redirectTo: '/home',
+          fullMatch: true,
+        ),
+        _i4.RouteConfig(
           HomeViewRoute.name,
-          path: '/home-view',
+          path: '/home',
         ),
         _i4.RouteConfig(
           StartupViewRoute.name,
@@ -54,7 +64,7 @@ class HomeViewRoute extends _i4.PageRouteInfo<void> {
   const HomeViewRoute()
       : super(
           HomeViewRoute.name,
-          path: '/home-view',
+          path: '/home',
         );
 
   static const String name = 'HomeView';
